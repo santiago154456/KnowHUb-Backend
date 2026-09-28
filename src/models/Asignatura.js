@@ -1,7 +1,7 @@
 ﻿import { DataTypes } from "sequelize";
 import { sequelize } from "../database/database.js";
 
-const Asignatura = sequelize.define("Asignatura", {
+export const Asignatura = sequelize.define("Asignatura", {
   idAsignatura: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -36,5 +36,3 @@ const Asignatura = sequelize.define("Asignatura", {
 },{
     timestamps: true,
 });
-
-export default Asignatura;
