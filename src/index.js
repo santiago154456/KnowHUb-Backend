@@ -1,5 +1,6 @@
 import app from "./app.js";
 import {sequelize} from "./database/database.js";
+import { loadInitialAsignaturas } from "./database/initAsignaturas.js";
 import "./models/Asignatura.js";
 
 
@@ -17,6 +18,8 @@ try {
   await sequelize.
   sync({force: true});
   
+  await loadInitialAsignaturas();
+
 app.listen(3000, () => {
     console.log("Server is running on port 3000");
   });
