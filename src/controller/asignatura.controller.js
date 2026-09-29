@@ -1,5 +1,5 @@
 import { where } from "sequelize";
-import { Asignatura } from "../models.Asignatura.js"
+import { Asignatura } from "../models/Asignatura.js"
 
 
 export const getAsignatura = async (req, res) => {

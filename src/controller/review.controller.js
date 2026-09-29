@@ -1,5 +1,5 @@
 import { Model, where } from "sequelize";
-import { Review } from "../models.Review.js"
+import { Review } from "../models/Review.js"
 import { getUsuario } from "./usuario.controller.js";
 
 // tweet ´+ info personal
