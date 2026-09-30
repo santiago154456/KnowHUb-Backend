@@ -43,7 +43,7 @@ export const Review = sequelize.define("Review", {
   idDocente: {
     type: DataTypes.INTEGER,
     allowNull: false,
-  },
+  }
 },{
     timestamps: true,
 });

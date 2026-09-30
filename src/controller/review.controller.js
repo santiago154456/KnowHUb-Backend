@@ -1,20 +1,27 @@
-import { Model, where } from "sequelize";
-import { Review } from "../models/Review.js"
-import { getUsuario } from "./usuario.controller.js";
+import { Review } from "../models/Review.js";
+import { Usuario } from "../models/Usuario.js";
+import { Asignatura } from "../models/Asignatura.js";
 
-// tweet ´+ info personal
+// tweet + info personal
 export const getReview = async (req, res) => {
     try{
        const review = await Review.findAll({
-        include: {
-            model: Usuario,
-            as: "usuario",
-            attirubutes: ["nomUsuario", "idUsuario", "correoElectronico"],
-        }
+        include: [
+            {
+                model: Usuario,
+                as: "usuario",
+                attributes: ["idUsuario", "nomUsuario", "fotoPerfil"],
+            },
+            {
+                model: Asignatura,
+                as: "asignatura",
+                attributes: ["idAsignatura", "nomAsignatura", "idUniversidad"],
+            },
+        ],
        });
         return res.json(review); 
     } catch (error){
-        return res.sendStatus(500).json({error: error.message});
+        return res.status(500).json({error: error.message});
     }
     
 };
@@ -69,32 +76,57 @@ export const deleteReview = async (req, res) => {
 export const getReviewId = async (req, res) => {
     try{
         const id = req.params.id;
-        const review = await Review.findByPk(id);
+        const review = await Review.findByPk(id, {
+            include: [
+                {
+                    model: Usuario,
+                    as: "usuario",
+                    attributes: ["idUsuario", "nomUsuario", "fotoPerfil"],
+                },
+                {
+                    model: Asignatura,
+                    as: "asignatura",
+                    attributes: ["idAsignatura", "nomAsignatura", "idUniversidad"],
+                },
+            ],
+        });
         if(!review){
-            return res.sendStatus(404).json({error: "Review not found"})
+            return res.status(404).json({error: "Review not found"})
         }
-        return res.sendStatus(204);
+        return res.json(review);
     }catch(error){
-        return res.sendStatus(500).json({error: error.message});
+        return res.status(500).json({error: error.message});
     }
 };
 
 export const getReviewReplies = async (req, res) => {
 
-    const {id} = req.params.id;
+    const id = req.params.id;
 
     try{
         const replies = await Review.findAll({
             where: {
                 parentReviewId: id,
             },
+            include: [
+                {
+                    model: Usuario,
+                    as: "usuario",
+                    attributes: ["idUsuario", "nomUsuario", "fotoPerfil"],
+                },
+                {
+                    model: Asignatura,
+                    as: "asignatura",
+                    attributes: ["idAsignatura", "nomAsignatura", "idUniversidad"],
+                },
+            ],
             order: [["createdAt", "DESC"]],
         });
 
         return res.json(replies);
 
     }catch(error){
-        return res.sendStatus(500).json({error: error.message});
+        return res.status(500).json({error: error.message});
     }
 
 };
