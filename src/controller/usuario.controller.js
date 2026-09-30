@@ -1,5 +1,6 @@
-import { where } from "sequelize";
 import { Usuario } from "../models/Usuario.js"
+import { Review } from "../models/Review.js"
+import { Asignatura } from "../models/Asignatura.js";
 
 
 export const getUsuario = async (req, res) => {
@@ -7,6 +8,20 @@ export const getUsuario = async (req, res) => {
        const usuario = await Usuario.findAll();
         return res.json(usuario); 
     } catch (error){
+        return res.sendStatus(500).json({error: error.message});
+    }
+
+};
+
+export const getUsuarioById = async (req, res) => {
+    try{
+        const id = req.params.id;
+        const usuario = await Usuario.findByPk(id);
+        if(!usuario){
+            return res.status(404).json({error: "Usuario not found"});
+        }
+        return res.json(usuario);
+    } catch(error){
         return res.sendStatus(500).json({error: error.message});
     }
     
@@ -59,17 +74,24 @@ export const getUsuarioReview = async (req, res) => {
     try{
         const review = await Review.findAll({
             where: {
-                userId: id,
+                idUsuario: id,
             },
-            include: {
-                model: Usuario,
-                as: "usuario",
-                attributes: ["nomUsuario","idUsuario"],
-            },
+            include: [
+                {
+                    model: Usuario,
+                    as: "usuario",
+                    attributes: ["idUsuario", "nomUsuario", "fotoPerfil"],
+                },
+                {
+                    model: Asignatura,
+                    as: "asignatura",
+                    attributes: ["idAsignatura", "nomAsignatura", "idUniversidad"],
+                },
+            ],
         });
+        return res.json(review);
 
     }catch(error){
-        return res.sendStatus(500).json({error: error.message});
+        return res.status(500).json({error: error.message});
     }
 };
-
