@@ -24,5 +24,15 @@ export function setupRelations() {
         foreignKey: "idAsignatura",
         as: "asignatura", // Review.getAsignatura()
     });
+    Review.hasMany(Review, {
+        foreignKey: "idReviewPadre",
+        as: "respuestas", // Review.getRespuestas()
+        onDelete: "cascade",
+        hooks: true,
+    });
+    Review.belongsTo(Review, {
+        foreignKey: "idReviewPadre",
+        as: "reviewPadre", // Review.getReviewPadre()
+    });
 
 }

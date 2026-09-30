@@ -13,7 +13,7 @@ export const Review = sequelize.define("Review", {
   },
   calificacion: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true, // Si la reseña es hija de otro review, no tiene calificacion
     validate: {
       min: 0,
       max: 5,
@@ -43,7 +43,15 @@ export const Review = sequelize.define("Review", {
   idDocente: {
     type: DataTypes.INTEGER,
     allowNull: false,
-  }
+  },
+  idReviewPadre: {
+    type: DataTypes.INTEGER,
+    allowNull: true, // Si no tiene padre -> null
+    references: {
+      model: "Reviews",
+      key: "idReview",
+    },
+  },
 },{
     timestamps: true,
 });
